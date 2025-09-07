@@ -1,0 +1,49 @@
+plugins {
+	id 'java-library'
+	id 'io.github.ultimark.sd.teabreak.codegen' version '0.0.1-SNAPSHOT'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+tasks.named('compileJava') {
+	dependsOn 'domaCodeGenPostgresqlEntity', 'domaCodeGenPostgresqlDao'
+}
+
+tasks.named('build') {
+	dependsOn 'domaCodeGenPostgresqlEntity', 'domaCodeGenPostgresqlDao'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.data:spring-data-jpa:3.5.3'
+	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	domaCodeGen 'org.postgresql:postgresql:42.7.7'
+}
+
+domaCodeGen {
+	
+	register('postgresql') {
+		url.set('jdbc:postgresql://localhost:5432/teachother')
+		user.set('teachother')
+		password.set('teachother')
+		templateDir.set(file('src/main/resources/codegen-template'))
+		
+		entity {
+			packageName.set('io.github.ultimark.sd.teachother.repositories')
+			useAccessor.set(true)
+			useListener.set(false)
+			showDbComment.set(true)
+		}
+		
+		dao {
+			packageName.set('io.github.ultimark.sd.teachother.repositories')
+		}
+	}
+}

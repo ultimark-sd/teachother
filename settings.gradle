@@ -1,0 +1,14 @@
+pluginManagement {
+	
+	repositories {
+	
+		gradlePluginPortal()
+		maven {
+			url = uri('http://localhost:8081/repository/maven-snapshots/')
+			allowInsecureProtocol = true
+		}
+	}
+}
+
+rootProject.name = 'teachother'
+include 'teachother-gen', 'teachother-web'
